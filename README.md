@@ -141,4 +141,5 @@ On üks seade, kus jookseb ROSi tuum ehk **roscore**. Teised seadmed peavad asum
 - [ROSi algkursus](https://sisu.ut.ee/rosak/avaleht)
 - https://moveit.ros.org/
 - [ROSi paigaldamine Ubuntus](http://wiki.ros.org/noetic/Installation/Ubuntu)
+- [Avatud robotplatvorm Robotont](https://dspace.ut.ee/bitstream/handle/10062/64341/Raudmae_MSc2019.pdf) Renno Raudmäe magistritöö
 - [micro-ROS for Arduino](https://github.com/micro-ROS/micro_ros_arduino)
