@@ -1,5 +1,7 @@
 # Harjutus 2
 
+[Video YouTubes](https://www.youtube.com/watch?v=-cgAYG6rszs)
+
 ## Kirjeldus
 
 Robotont otsib enda ümbruskonnas üles oranži porgandi ja sõidab selle juurde. Kui on porgandi juurte jõudud otsib järgmse porgandi ja sõidab selle juurde jne kuni program katkestatakse.
@@ -64,7 +66,7 @@ val_lower_limit: 100
 
 ### Katsetame
 
-OpenCV käivitamine:
+Laigutuvastaja käivitamine:
 
 ```bash
 roslaunch opencv_apps blob_detection.launch debug_mode:=deploy image:=/camera/color/image_raw_throttled
@@ -91,8 +93,10 @@ rostopic info /blob_detection/blobs
 
 Mis rubriiki tellib `carrot_follower`? Kas see on õige? Peata ja käivita uuesti nii, et telliks õiget rubriiki.
 
+Mida tellib?
+
 ```bash
-rosrun carrot_follower carrot_follower.py xxxx:=/blob_detection/blobs
+rosrun carrot_follower carrot_follower.py /blobs:=/blob_detection/blobs
 ```
 
 Kuula pealt sõnumeid:
@@ -107,5 +111,6 @@ rostopic echo /blob_detection/blobs
 
 ## Lingid
 
+- [Video harjutusest](https://www.youtube.com/watch?v=-cgAYG6rszs)
 - [github.com/ut-ims-robotics/opencv_apps/](https://github.com/ut-ims-robotics/opencv_apps/)
 - [github.com/unitartu-edu/carrot_follower](https://github.com/unitartu-edu/carrot_follower)
