@@ -78,7 +78,7 @@ ROS industrial liikmed: [rosindustrial.org/ric/current-members](https://rosindus
 - [milremrobotics.com](https://milremrobotics.com/)
 
 
-## Terminid
+## 2. Terminid
 
 - **Kimp** (_package_) - funktsionaalne kogum sõlmi
 - **Sõlm** (_node_) - konkreetsele ülesandele pühendatud programm
@@ -261,10 +261,96 @@ Näide:
 
 `rostopic echo /cmd_vel`
 
+## 3. Kinemaatika
+
+Kinemaatika on teadus liikumisest.
+
+Robot koosneb lülidest (_link_), mis on ühendatud liigendite (_joint_) abil.
+
+Lülid on paindumatud osad. Neil on inerts, visuaalne omapära ja need võivad muude asjadega kokku põrgata.
+
+Liigendid ühendavad lülisid ja määravad, kuidas robot saab liikuda.
+
+Liigend määrab, kuidas on lüli liikumine referentsiks oleva koordinaatsüsteemi suhtes piiratud.
+
+Vabadusaste (_degrees of freedom_).
+
+### Ühe vabadusastmega liigend
+
+Saavad liikuda ainult ühel viisil või ühes suunas.
+
+- **Pöördliigend** pöörleb ümber ühe telje
+- **Translatsioonipaar** üks detail on fikseeritud ning teine saab libiseda ühes teljes.
+- **Kruviliigend** koosneb keermelatist, mis liigub edasi-tagasi ühes teljes.
+
+### Mitme vabadusastmega liigend
+
+Saavad liikuda sõltumatult vähemalt kahes teljes või telje ümber.
+
+- **Silindriline liigend** on kombinatsioon pöörd- ja translatsiooni liigenditest. See võimaldab ühes teljes nii pöörlemist kui ka libisemist. Kokku on sellisel liigendil kaks vabadusastet.
+- **Kuuli ja sokli liigend** koosnebki kuulist, mis saab sokli sees pöörelda. See annab kolm vabadusastet.
+- **Tasapinnaline liigend** võimaldab liikumist ühel tasandil, aga mitte väljaspool seda tasandit. Sellisel liigendil on kolm vabadusastet.
+- **Hõljuv liigend** ei ole füüsiline liigend, aga tuleb kasuks, kui on tarvis kirjeldada kahte lüli, mis ei ole füüsiliselt üksteisega ühendatud. Näiteks on see kasulik, et kirjeldada lendava roboti paiknemist teatud punkti suhtes. Sellisel liigendil on liikumisvabadus igas suunas ehk kuus vabadusastet.
+
+### Jadamanipulaator
+
+Järjestikused üksteisega ühendatud lülid ja liigendid moodustavda **kinemaatilise ahela** (_kinematic chain_).
+
+**Jadamanipulaator** (_serial manipulator_) on lülid, mis on omavahel ühendatud pöördliigenditega. N:robotkäed, tööstusrobotid ja koostöörobotid.
+
+Selle lüliahela algus on fikseeritud. Ahela lõpus on mõjur (_end effector_). N: haarats.
+
+Üks pöördliigend annab ühe vabadusatme. 6 pöördliigendit = 6 vabadusastet.
+
+### Asend
+
+Lüli positsioon on selle asukoht ruumis. Orientatsioon on lüli pööratuse suund ja kaugus. Koos moodustavad need lüli **asendi** (_pose_).
+
+**Ruumikoordinaadid** (_Cartesian space_). Asukohta kirjeldatakse x-, y- ja z- teljes.
+
+![](img/kinematics_cartesian_axes_513aad6ee4b81a99dc8722581216523f.png)
+
+Kui teame jadamanipulaatori iga pöördliigendi nurka, saame üheselt kirjeldada roboti iga osa asendit. Seda liigendite nurkade kogumit nimetatakse **liigendi olekuks** (_joint state_). Liigendi olekut teades on võimalik taasluua kogu roboti asend.
+
+Kõigi võimalike liigendiolekute kogumit nimetatakse **liigendiruumiks** (_joint space_).
+
+![](img/kinetics_joint_state_illustration_994e8b3cf643102b187fc9f07aa07c84.png)
+
+**Pärikinemaatikat** (_forward kinematics_) ja roboti kirjeldust kasutades saame viia info liigendiruumist koordinaatruumi. Tteades liigendiolekut saame arvutada manipulaatori mõjuri asendi koordinaatruumis. Pärikinemaatika kasutab tavalist trigonomeetriat. Tavaliselt tehakse neid arvutusi maatriksite korrutamise abil.
+
+![](img/kinetics_forwardkin_illustration_98b40736164a5a15871ba79fe6579ec7.png)
+
+Info viimine koordinaatruumist liigendiruumi on **pöördkinemaatika** (_inverse kinematics_).
+
+Näiteks võib meil olla vaja viia roboti haarats järgmise eseme haaramiseks sobivasse asukohta. Eseme asukoht on kirjeldatud koordinaatruumis ja meil on vaja seada roboti liigendid õigete nurkade alla.
+
+![](img/kinetics_inversekin_illustration_791de3992df17bc4f329e8493abe4e1b.png)
+
+### URDF (_Unified Robot Description Format_)
+
+URDF on keel, mille abil saame kirjeldada, millistest lülidest robot koosneb ning kuidas need lülid teineteise suhtes liiguvad.
+
+URDF on formaat robotite kirjeldamiseks. See on XML kujul tekstifail, mis kirjeldab roboti mudelit.
+
+Tüüpiline URDF mudel sisaldab lülisid ja liigendeid. Lülid on roboti komponendid ja liigendid on nendevahelised ühendused.
+
+```xml
+<robot name="minu_robot">
+  <link> ... </link>
+  <link> ... </link>
+  <link> ... </link>
+  <joint>  ...  </joint>
+  <joint>  ...  </joint>
+  <joint>  ...  </joint>
+</robot>
+```
+
+![](img/urdf_link.png)
+
 ## Harjutused
 
-- [Harjutus 2 kirjeldus](harjutus-2.md)
-
+- [Harjutus 2](harjutus-2.md)
+- [Harjutus 3](harjutus-3.md)
 
 ## Kasutatud materjalid
 
