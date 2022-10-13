@@ -179,3 +179,131 @@ Lisame roboti kere peale plaadi (_hood_). Kuna katus kere suhtes ei liigu, siis 
 
 ## Anduri lisamine
 
+- Loome anduri jaoks lüli nimega **lidar**. Määrame selle suuruse ja värvi. Olgu tema kõrgus (**length**) 0.08 m ja raadius (**radius**) 0.05 m.
+- Loome liigendi. Peamine erinevus selle ja eelnevate liigendite vahel on see, et sensor peaks kinnituma roboti pealmise plaadi, mitte kere külge. See tähenab, et sensori lüli algkoordinaadid (origin) tuleb arvutada plaadi (hood) algkoordinaadist, mitte kere (base_link) algkoordinaadist! Asetame ta plaadi suhtes 0.150 meetri võrra x-telje suunas ja 0.04 meetri võrra z-telje suunas.
+- Määrame rpy väärtuseks 0 0 0, sest me ei taha loodud silindrit plaadi suhtes pöörata.
+- Et lisada paindlikkust, loome liigendi selliselt, et meie sensor saab z-telje ümber pöörelda. Selleks määrame pöörlemistelje axis väärtuse z-komponendiks 1 (ja teised komponendid nullid, kuna nende ümber me pöörelda ei taha).
+
+```xml
+<link name="lidar">
+  <visual>
+    <geometry>
+      <cylinder length="0.08" radius="0.05" />
+    </geometry>
+    <material name="gray">
+      <color rgba="0.7 0.7 0.7 1" />
+    </material>
+  </visual>
+</link>
+
+<joint name="lidar_to_hood" type="continuos">
+  <parent link="hood" />
+  <child link="lidar" />
+  <origin xyz="0.15 0 0.004" rpy="0 0 0" />
+</joint>
+```
+
+## RVizi konfihuratsioonifail
+
+Salvestatakse kimbu `config\` kausta.
+
+```bash
+cd ~catkin_ws/src/fourwheeler_description/
+mkdir config
+```
+
+File > Save Config As `fw.rviz`
+
+## Käivitusfaili loomine
+
+```bash
+cd ~catkin_ws/src/fourwheeler_description/
+mkdir launch
+cd launch
+gedit display.launch
+```
+
+Faili sisu:
+
+```xml
+<launch>
+  <param name="robot_description" command="$(find xacro)/xacro '$(find fourwheeler_description)/urdf/fourwheeler.urdf'" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find fourwheeler_description)/config/fw.rviz" />
+</launch>
+```
+
+- pkg määrab kimbu nime
+- type määrab faili nime, kus asub käivitatav sõlm
+- name määrab nime, mille all käivitatud sõlm rosnode list kasutades hiljem kuvatakse.
+
+Käivitamine:
+
+```bash
+roslaunch fourwheeler_description display.launch
+```
+
+## Roboti parameetriline kirjeldus
+
+XACRO on XML-põhine makrokeel, millega saab ROSi robotitele luua parametriseeritud mudeleid.
+
+Kuna XACRO fail on kõrgema tasemega kui URDF, on roboti mudeli ROS-is kasutamiseks vaja XACRO teisendada klassikalisse URDF formaati. Selle jaoks saab kasutada `xacro` käsku.
+
+```bash
+cd ~catkin_ws/src/fourwheeler_description/urdf
+cp fourwheeler.urdf fourwheeler.urdf.xacro
+```
+
+Muuta `display.launch` fail ja muuda seda nõnda, et mudeli `fourwheeler.urdf` asemel kasutataks mudelit `fourwheeler.urdf.xacro`.
+
+`fourwheeler.urdf.xacro` failis muuta rida `<robot>`
+
+```xml
+<robot name="fourwheeler" xmlns:xacro="http://www.ros.org/wiki/xacro">
+```
+
+### XACRO muutujaid (_property_)
+
+![](img/4wheeler_drawings.png)
+
+```xml
+<xacro:property name="base_with" value="0.52" />
+<xacro:property name="wheel_with" value="0.05" />
+<xacro:property name="wheel_radius" value="0.1" />
+<xacro:property name="half_track" value="${base_with/2 + wheel_with/2}" />
+```
+
+Nüüd saame muuta:
+
+```xml
+<link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.43 ${base_with} 0.14" />
+      </geometry>
+    </visual>
+  </link>
+```
+
+```xml
+<link name="front_left_wheel">
+  <visual>
+    <geometry>
+      <cylinder legth="${wheel_with}" radius="${wheel_radius}" />
+    </geometry>
+    <material name="black">
+      <color rgba="0 0 0 1" />
+    </material>
+  </visual>
+</link>
+
+<joint name="front_left_wheel_to_base" type="continuous">
+  <parent link="base_link" />
+  <child link="front_left_wheel" />
+  <origin xyz="0.1075 ${half_track} -0.05" rpy="1.57 0 0" />
+  <axis xyz="0 0 1" />
+</joint>
+```
+
+## XACRO makrode loomine
