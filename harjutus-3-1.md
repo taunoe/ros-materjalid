@@ -265,13 +265,19 @@ Muuta `display.launch` fail ja muuda seda nõnda, et mudeli `fourwheeler.urdf` a
 
 ### XACRO muutujaid (_property_)
 
-![](img/4wheeler_drawings.png)
+![4wheeler](img/4wheeler_drawings.png)
 
 ```xml
 <xacro:property name="base_with" value="0.52" />
+<xacro:property name="base_length" value="0.43" />
+<xacro:property name="base_height" value="0.14" />
 <xacro:property name="wheel_with" value="0.05" />
 <xacro:property name="wheel_radius" value="0.1" />
-<xacro:property name="half_track" value="${base_with/2 + wheel_with/2}" />
+<xacro:property name="wheel_y_pos" value="${base_with/2 + wheel_with/2}" />
+<xacro:property name="wheel_y_pos" value="${base_length/2 - wheel_radius}"/>
+<xacro:property name="lowrider" value="${base_height/2 * -1}" />
+<xacro:property name="lidar_radius" value="0.05" />
+<xacro:property name="hood_height" value="0.005" />
 ```
 
 Nüüd saame muuta:
@@ -280,7 +286,7 @@ Nüüd saame muuta:
 <link name="base_link">
     <visual>
       <geometry>
-        <box size="0.43 ${base_with} 0.14" />
+        <box size="${base_length} ${base_with} ${base_height}" />
       </geometry>
     </visual>
   </link>
@@ -301,9 +307,98 @@ Nüüd saame muuta:
 <joint name="front_left_wheel_to_base" type="continuous">
   <parent link="base_link" />
   <child link="front_left_wheel" />
-  <origin xyz="0.1075 ${half_track} -0.05" rpy="1.57 0 0" />
+  <origin xyz="${wheel_y_pos} ${wheel_y_pos} -0.05" rpy="1.57 0 0" />
   <axis xyz="0 0 1" />
 </joint>
 ```
 
 ## XACRO makrode loomine
+
+![base](img/base.png)
+
+```xml
+<xacro:macro name="wheel" params="wheel_name reflect_y reflect_x">
+<link name="${wheel_name}">
+  <visual>
+    <geometry>
+      <cylinder legth="${wheel_with}" radius="${wheel_radius}" />
+    </geometry>
+    <material name="black">
+      <color rgba="0 0 0 1" />
+    </material>
+  </visual>
+</link>
+
+<joint name="${wheel_name}_wheel_to_base" type="continuous">
+  <parent link="base_link" />
+  <child link="${wheel_name}" />
+  <origin xyz="${quarter_length * reflect_x} ${wheel_x_pos * reflect_y} -0.05" rpy="1.57 0 0" />
+  <axis xyz="0 0 1" />
+</joint>
+</xacro:macro>
+
+<xacro:wheel wheel_name="front_left_wheel" reflext_y="1" reflect_x="1"/>
+<xacro:wheel wheel_name="front_right_wheel" reflext_y="-1" reflect_x="1"/>
+<xacro:wheel wheel_name="rear_left_wheel" reflext_y="1" reflect_x="-1"/>
+<xacro:wheel wheel_name="rear_right_wheel" reflext_y="-1" reflect_x="-1"/>
+
+<link name="hood">
+  <visual>
+    <geometry>
+      <box size="${base_legth + 0.01} ${base_width + 0.01} ${hood_height}" />
+    </geometry>
+    <material name="yellow">
+      <color rgba="0.8 0.8 0 1" />
+    </material>
+  </visual>
+</link>
+
+<joint name="hood_to_base" type="fixed">
+  <parent link="base_link" />
+  <child link="hood" />
+  <origin xyz="0 0 ${base_height/2 + hood_height/2}"/>
+</joint>
+
+<link name="lidar">
+  <visual>
+    <geometry>
+      <cylinder length="0.08" radius="${lidar_radius}" />
+    </geometry>
+    <material name="gray">
+      <color rgba="0.7 0.7 0.7 1" />
+    </material>
+  </visual>
+</link>
+
+<joint name="lidar_to_hood" type="continuos">
+  <parent link="hood" />
+  <child link="lidar" />
+  <origin xyz="${base_lenght/2 - lidar_radius} 0 0.004" rpy="0 0 0" />
+</joint>
+```
+
+## Simuleeritud juhtimine
+
+Kasutame sõlme: `fake_driver_node`.
+
+**fake_driver_node** otsib lüli nimega **base_footprint** ning juhib seda.
+
+```bash
+<link name="base_footprint" />
+<joint name="base_footprint_to_base" type="fixed">
+  <parent link="base_footprint" />
+  <child link="base_link" />
+  <origin xyz="0 0 ${-(lowride - wheel_radius)}"/>
+</joint>
+```
+
+Käivitamine:
+
+```bash
+roslaunch fourwheeler_description display.launch
+rosrun robotont_driver fake_driver_node
+rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+```
+
+## Käivitusvail
+

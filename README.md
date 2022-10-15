@@ -316,7 +316,7 @@ Kõigi võimalike liigendiolekute kogumit nimetatakse **liigendiruumiks** (_join
 
 ![](img/kinetics_joint_state_illustration_994e8b3cf643102b187fc9f07aa07c84.png)
 
-**Pärikinemaatikat** (_forward kinematics_) ja roboti kirjeldust kasutades saame viia info liigendiruumist koordinaatruumi. Tteades liigendiolekut saame arvutada manipulaatori mõjuri asendi koordinaatruumis. Pärikinemaatika kasutab tavalist trigonomeetriat. Tavaliselt tehakse neid arvutusi maatriksite korrutamise abil.
+**Pärikinemaatikat** (_forward kinematics_) ja roboti kirjeldust kasutades saame viia info liigendiruumist koordinaatruumi. Teades liigendiolekut saame arvutada manipulaatori mõjuri asendi koordinaatruumis. Pärikinemaatika kasutab tavalist trigonomeetriat. Tavaliselt tehakse neid arvutusi maatriksite korrutamise abil.
 
 ![](img/kinetics_forwardkin_illustration_98b40736164a5a15871ba79fe6579ec7.png)
 
@@ -350,7 +350,8 @@ Tüüpiline URDF mudel sisaldab lülisid ja liigendeid. Lülid on roboti kompone
 ## Harjutused
 
 - [Harjutus 2](harjutus-2.md)
-- [Harjutus 3](harjutus-3.md)
+- [Harjutus 3.1](harjutus-3-1.md) 4-ratalise roboti URDF kirjeldus
+- [Harjystus 3.2](harjutus-3-2.md) Manipulaatorroboti URDF kirjeldus
 
 ## Kasutatud materjalid
 
