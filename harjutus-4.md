@@ -13,6 +13,8 @@ ROSis on roboti liikumise koordinaatsüsteemi
 - **y-telg** vasakule
 - **z-telg** üles.
 
+![angular](img/angular.gif)
+
 ## Kimbu loomine
 
 - Nimi: `geometric_shapes`.

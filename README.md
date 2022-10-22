@@ -1,4 +1,4 @@
-# ROS
+# ROS1
 
 ## Arengusuunad kaasaegses tööstusrobootikas
 
