@@ -40,8 +40,6 @@ cd ~/catkin_ws/src/aironbot_description/urdf/
 gedit aironbot.urdf
 ```
 
-
-
 ## Links
 
 - https://github.com/unitartu-edu/aironbot_description

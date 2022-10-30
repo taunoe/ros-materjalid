@@ -347,11 +347,38 @@ Tüüpiline URDF mudel sisaldab lülisid ja liigendeid. Lülid on roboti kompone
 
 ![](img/urdf_link.png)
 
+## AR märgised
+
+Liitreaalsuse (_Augmented Reality_) märgised on must-valged, unikaalsed.
+
+![](img/ar-margis.png)
+
+Kasutades ROS-i kimpu `ar_track_alvar` saame me AR märgisest järgneva info:
+
+- ID
+- Positsioon (_position_)
+- Orientatsioon (_orientation_)
+
+Puudub vertikaalne sümeetria ja märgiste nurgad on 90 kraadi. Seega võimalik öelda palju on märgist keeratud (_roll_), kallutatud (_pitch_), pööratud (_yaw_).
+
+### Kvaternion
+
+x, y, z ja w moodustavad kvaternioni.
+
+**Kvaternionid** on matemaatilised konstruktsioonid, mida kasutatakse 3D pöörete kirjeldamiseks. Selleks, et need oleksid kergemini mõistetavad, tuleb need teisendada mõnele muule kujule, näiteks **Euleri nurkadeks**. Euleri nurgad kirjeldavad objekti orientatsiooni x- (roll), y- (pitch) ja z-teljes (yaw) fikseeritud võrdlusorientatsiooni suhtes.
+
+![roll](img/roll_pitch_yaw_1.png)
+
+## Olekumasinad
+
+![Olekumasinad](img/olekud.png)
+
 ## Harjutused
 
 - [Harjutus 2](harjutus-2.md)
 - [Harjutus 3.1](harjutus-3-1.md) 4-ratalise roboti URDF kirjeldus
 - [Harjystus 3.2](harjutus-3-2.md) Manipulaatorroboti URDF kirjeldus
+- [Harjutus 4](harjutus-4.md)
 
 ## Kasutatud materjalid
 
