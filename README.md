@@ -373,6 +373,38 @@ x, y, z ja w moodustavad kvaternioni.
 
 ![Olekumasinad](img/olekud.png)
 
+## Rajaplaneerimine (_path planning_)
+
+Isejuhtiv robot vajab algoritmi, mis planeerib teekonna roboti hetke asukohast sihtpunkti.
+
+Rajaplaneerimisalgoritm vjab kaarti (_map_), kus on üheselt selge, millistel aladel roboti tohib viibida ja millistel mitte.
+
+Roboti asukoha automaatne tuvastamine kannab nimetust **lokaliseerimine** (_localization_). Tihtilugu ei ole roboti kaart aga täielik ning seetõttu räägime isegi samaaegsest lokaliseerimisest ja kaardistamisest - SLAM (_simultaneous localization and mapping_).
+
+Kaardid jagunevad üldjoontes kaheks:
+
+- Topoloogilised kaardid
+- Geomeetrilised kaardid
+
+**Topoloogiline kaart** on enamasti kogumik olulisi punkte (_landmark_).
+
+![Topoloogiline kaart](img/topomap-est.png)
+
+**Geomeetrilised kaardid** sisaldavad geomeetrilist informatsiooni. Geomeetrilised kaardid võivad olla:
+
+- pidevad
+- diskreetsed
+
+**Diskreetsetel kaartidel** on kaardistatud ala jagatud väiksemateks tükkideks. Näiteks saame 5x5 m suuruse toa jagada 1x1 m suurusteks ruutudeks. See on kasulik, sest pidevad kaardid on tihti väga suured ja keerulised, mis tähendab, et terve kaardi korraga töötlemiseks on vaja palju arvutusjõudlust ja mälu.
+
+**Pideval kaardil** ei ole ruudustikku, vaid on ruumimõõtmed (näiteks toa laius). Pidevate kaartide eeliseks on see, et roboti tõenäosuslikku asukohta saab väga täpselt kirjeldada.
+
+**Globaalse plaanimise** eesmärk on kõige alguses, kui robot veel liikuma pole hakanud, arvutada välja parim võimalik teekond (koordinaatide järjestus) sihtpunkti.
+
+Kogu liikumise vältel arvutatakse lühiajalisemat **lokaalset plaani**, et korrigeerida triivi ja juhtida robot uuetest takistustest mööda.
+
+Kaardid, rajaplaanimine ja lokaliseerimine kokku moodustab roboti navigeerimisvõimekuse.
+
 ## Harjutused
 
 - [Harjutus 2](harjutus-2.md)
